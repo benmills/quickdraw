@@ -1,8 +1,9 @@
 var last_update = 0;
+var HOST = '127.0.0.1';
 
 function poll() {
 	$.ajax({
-		url: 'http://bmdev.org:1111/get/?ts='+last_update+'&callback=?',
+		url: 'http://'+HOST+':1111/get/?ts='+last_update+'&callback=?',
 		dataType: 'json',
 		success: function(data) {
 			last_update = Math.round(new Date().getTime() / 1000);
@@ -19,7 +20,7 @@ $(function() {
 	$("#save").click(function(e) {
 		e.preventDefault();
 		if (has_data)  {
-			$.get('http://bmdev.org:1111/?message='+canvas.toDataURL());
+			$.get('http://'+HOST+':1111/?message='+canvas.toDataURL());
 			canvas.width = canvas.width; // Clear canvas
 			has_data = false;
 		}
