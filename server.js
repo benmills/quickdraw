@@ -27,11 +27,19 @@ function send_message(req, res, parsed_req) {
 	res.write('1');
 	res.end();
 	
-	if (parsed_req.query.message) {
+	if (parsed_req.query.message || parsed_req.query.text_message) {
+		img_msg = parsed_req.query.message || "";
+		text_msg = parsed_req.query.text_message || "";
+		name = parsed_req.query.name || "Nerd";
+		
 		messages.push({
 			ts: Math.round(new Date().getTime() / 1000),
-			message: parsed_req.query.message
+			message: img_msg,
+			text_message: text_msg,
+			name: name
 		});
+		sys.puts('text: '+text_msg);
+		sys.puts('name: '+name);
 		if (messages.length > 10) messages.shift();
 	}
 	
@@ -42,7 +50,7 @@ function send_message(req, res, parsed_req) {
 		callbacks = [];
 	}
 	
-	sys.puts('\n\n'+messages.length);
+	sys.puts('\n\n len: '+messages.length);
 }
 
 function get_messages(req, res, parsed_req) {

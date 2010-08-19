@@ -1,102 +1,51 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
-
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>Quickdraw</title>
-	<meta name="generator" content="TextMate http://macromates.com/">
-	<meta name="author" content="arcus">
-	<!-- Date: 2010-08-09 -->
-
-	<style type="text/css" media="screen">
-		body {
-			background: #282828;
-			font-family: helvetica;
-		}
-		#main {
-			margin: 0px auto;
-			width: 840px;
-		}
-		.post {
-			border-bottom: 1px solid #383838;
-			background: #343434;
-			width: 840px;
-		}
-			.post p {
-				margin: 10px 10px 0px 0px;
-				padding: 0px;
-				float: right;
-				font-size: 10px;
-				color: #484848;
-				text-transform: uppercase;
-				text-shadow: 1px 1px 0px #2E2E2E;
-			}
-		#poster {
-			height: 182px; width: 840px;
-			background: #1e1e1e url('poster.png');
-			border-top: 10px solid #3d3d3d;
-			position: relative;
-		}
-		#controls {
-			margin-top: 10px;
-			color: #373737;
-			font-size: 18px;
-		}
-			a {
-				text-decoration: none;
-				color: #6390D7;
-			}
-			a#save {
-				color: #2cc056;
-			}
-			a#clear {
-				color: #c02c2c;
-			}
-			#controls .drawing {
-				float: right;
-			}
-				#blue {
-					color: #0000FF;
-				}
-					#blue.off {
-						color: #283A7C;
-					}
-					a#blue:hover {
-						color: #0000FF;
-					}
-				#white {
-					color: #EEE;
-				}
-					#white.off {
-						color: #797979;
-					}
-					a#white:hover {
-						color: #EEE;
-					}
-	</style>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="media/css/app.css">
+	<script src="http://www.google.com/jsapi"></script>
+	<script> google.load("jquery", "1.4"); </script>
+	<script src="media/js/draw.js" type="text/javascript" charset="utf-8"></script>
+	<script src="media/js/client.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
-	<div id='main'>
-		
-	<div id="messages">
-	</div>
 	
-	<div id="poster"><canvas id="draw_box" width="840" height="181"></canvas></div>
+	<header>
+		<h1>QuickDraw</h1>
+	</header>
 	
-	<div id="controls">
-		<a href='#' id='save'>send</a>, <a href='#' id='clear'>clear</a>, <a href='#' id='expand'>+</a>
-		<div class='drawing'>
-			<a href="#" id='blue' class='off'>blue</a>, <a href="#" id='white' class=''>white</a>
+	<div id="shell">
+		<div class="content s">
+			
+			<ul class="log">
+				<li class="system">
+					<span>QuickDraw</span>
+					<p>
+						Hello! QuickDraw is slick way to collaborate by sharing messages and drawings.<br>
+						Please <strong>provide a name below</strong>, and your all set to chat!
+					</p>
+				</li>
+				<li>
+					<span>Name</span>
+					<p>message</p>
+				</li>
+			</ul>
+			
+			<div id="post">
+				<canvas id="draw" width="735" height="198"></canvas>
+				<ul>
+					<li><a id="clr" class="" href="#">clear drawing x</a></li>
+					<li><a id="dk" class="btn r s" href="#">dark</a></li>
+					<li><a id="lt" class="btn r s" href="#">light</a></li>
+				</ul>
+				<form>
+					<input autocomplete="off" id="msg" class="r s" type="text" size="100" value="Type a message here">
+					<a id="say" class="btn r s" href="#">say</a>
+				</form>
+			</div>
+			
 		</div>
 	</div>
-	<p>
-		Draw in the box above and click send to chat. Currently packed Quickdraw is 4,135 bytes.
-	</p>
-</div>
 </body>
-
-<script src="jquery.1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="draw.js" type="text/javascript" charset="utf-8"></script>
-<script src="client.js" type="text/javascript" charset="utf-8"></script>
 </html>

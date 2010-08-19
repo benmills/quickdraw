@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Quickdraw</title>
+<meta charset="utf-8">
+<style>*{margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;}:focus{outline:none;}body{line-height:1;}ol,ul{list-style:none;}header,footer{display:block;}body,form input,p,li{color:#655f5d;font-family:"Trebuchet MS",Helvetica,Arial,Sans-serif;font-size:13px;}a,a:link{color:#b24e2f;}a:hover,#lt:hover{color:#d55e3a;}strong{color:#333;font-weight:bold;}.r{-moz-border-radius:1px;-webkit-border-radius:1px;border-radius:1px;}.s{-moz-box-shadow:0 1px 3px #222;-webkit-box-shadow:0 1px 3px #222;box-shadow:0 1px 3px #222;}html,body{background-color:#b24e2f;text-align:center;}body{padding-bottom:20px;}header,#shell{margin:0 auto;text-align:left;width:980px;}#shell{background-color:#93432b;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;padding:10px;position:relative;}.content{background:url(i/bg.gif) left top repeat-y #FFF;height:650px;border-left:solid 10px #425875;}header h1{background:url(i/quickdraw.gif) 15px top no-repeat transparent;display:block;height:42px;text-indent:-99em;margin:20px 0;}.log{display:block;height:400px;overflow:auto;}.log li{position:relative;}.log li span{color:#333;display:block;padding:5px 0;position:absolute;line-height:16px;left:0;width:100px;text-align:right;}.log li p{line-height:16px;margin-left:110px;padding:5px 350px 5px 10px;}.log .system span{color:#b24e2f;padding:11px 0;}.log .system p{background-color:#f8fada;border-bottom:solid 1px #d0d3aa;padding:10px 350px 9px 10px;}#post{background:url(i/grid.gif) left top repeat transparent;border-top:solid 1px #cdd5e1;height:249px;margin-left:110px;position:relative;}#post ul{float:right;margin:5px 10px 0 0;}#post ul li{padding:0 0 10px;float:left;clear:left;}a#clr{color:#333;text-decoration:none;float:right;font-size:11px;text-align:right;width:110px;margin:7px 0;}a#show{margin-top:40px;}#draw,#draw:hover,#draw:focus,#draw:active{cursor:crosshair;}form{background-color:#425875;position:absolute;bottom:0;left:0;padding:10px;width:840px;}form input{font-size:13px;color:#b3b3b3;border:none;outline:none;padding:0 10px 0;height:30px;width:700px;float:left;}form input:focus{color:#333;}a.btn{color:#333;display:block;background-color:#f4f3f2;float:right;width:110px;height:30px;line-height:30px;text-align:center;text-decoration:none;text-shadow:0 1px 1px #333;letter-spacing:.04em;}a.btn:hover{background-color:#e8e8e7;color:#000;}#lt{color:#b24e2f;}#show,#say{background-color:#394c65;color:#F4F4F4;}#show:hover,#say:hover{background-color:#2e445b;color:#FFF;}</style>
+<script src="http://www.google.com/jsapi"></script>
+<script>google.load("jquery", "1.4");</script>
+<script type="text/javascript">var last_update=0,name=prompt("Please enter your name","Nerd"),placeholder_text='Type a message here',canvas,context,has_data=false,color="#222222",started=false,draw=function(ev){if(started){ev=calc(ev);context.lineTo(ev._x,ev._y);context.stroke();has_data=true}},calc=function(ev){if(ev.layerX||ev.layerX==0){ev._x=ev.layerX;ev._y=ev.layerY}else if(ev.offsetX||ev.offsetX==0){ev._x=ev.offsetX;ev._y=ev.offsetY}return ev};function poll(){$.ajax({url:'http://bmdev.org:1111/get/?ts='+last_update+'&callback=?',dataType:'json',success:function(data){last_update=Math.round(new Date().getTime()/1000);var oHeight=$(".log").attr("scrollHeight");for(i in data){c='<li><span>'+data[i].name+'</span><p>';if(data[i].message.length>0)c+='<img src="'+data[i].message.split(' ').join('+')+'"><br>';c+=data[i].text_message+'</p></li>';$(".log").append(c)}var nHeight=$(".log").attr("scrollHeight");if(nHeight>oHeight)$(".log").stop(true).animate({scrollTop:nHeight},200)},complete:poll})}$(function(){canvas=document.getElementById('draw');context=canvas.getContext('2d');$('#draw').mousedown(function(ev){context.beginPath();ev=calc(ev);context.moveTo(ev._x,ev._y);context.lineWidth=2;context.strokeStyle=color;started=true}).mousemove(draw).mouseup(function(ev){if(started){started=false;draw(ev)}}).mouseout(function(ev){if(started){started=false;draw(ev)}});poll();$("#say").click(function(e){e.preventDefault();text_message=$('#msg').val();if(text_message==placeholder_text)text_message='';if(has_data||text_message.length>0){img=has_data?canvas.toDataURL():"";has_data=false;canvas.width=canvas.width;$('#msg').val(placeholder_text);$.get('http://bmdev.org:1111/?message='+img+"&text_message="+text_message+"&name="+name)}});$('#clr').click(function(e){e.preventDefault();canvas.width=canvas.width;has_data=false});$("#dk").click(function(e){e.preventDefault();color="#222222"});$("#lt").click(function(e){e.preventDefault();color="#c10e0e"});var cvs=document.getElementById('draw');cvs.onselectstart=function(){return false};cvs.onmousedown=function(){return false};$('#msg').focus(function(){this.select()})});</script>
+</head>
+<body>
+<header>
+<h1>QuickDraw</h1>
+</header>
+<div id="shell">
+<div class="content s">
+<ul class="log">
+<li class="system">
+<span>QuickDraw</span>
+<p>
+Hello! QuickDraw is slick way to collaborate by sharing messages and drawings.<br>
+Please <strong>provide a name below</strong>, and your all set to chat!
+</p>
+</li>
+</ul>
+<div id="post">
+<canvas id="draw" width="735" height="198"></canvas>
+<ul>
+<li><a id="clr" class="" href="#">clear drawing x</a></li>
+<li><a id="dk" class="btn r s" href="#">dark</a></li>
+<li><a id="lt" class="btn r s" href="#">light</a></li>
+</ul>
+<form>
+<input autocomplete="off" id="msg" class="r s" type="text" size="100" value="Type a message here">
+<a id="say" class="btn r s" href="#">say</a>
+</form>
+</div>
+</div>
+</div>
+</body>
+</html>
