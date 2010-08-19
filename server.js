@@ -2,6 +2,7 @@ var sys = require('sys'),
 		http = require('http'),
 		url = require('url'),
 		fs = require("fs"),
+		locked = false,
 		
 		// Global Vars
 		messages = [];
@@ -29,17 +30,19 @@ http.createServer(function (req, res) {
 
 // Clean up hanging requests
 setInterval(function() {
-	sys.puts('clean up!', callbacks.length);
-	var ts = Math.round(new Date().getTime() / 1000);
-	for (i in callbacks) {
-		if (callbacks[i]) {
-			if ((callbacks[i].ts + 40) < ts) {
-				return_blank(callbacks[i]);
-				callbacks.remove(i);
+	if (locked == false) {
+		sys.puts('clean up!', callbacks.length);
+		var ts = Math.round(new Date().getTime() / 1000);
+		for (i in callbacks) {
+			if (callbacks[i]) {
+				if ((callbacks[i].ts + 20) < ts) {
+					return_blank(callbacks[i]);
+					callbacks.remove(i);
+				}
 			}
 		}
 	}
-}, 2000);
+}, 3000);
 
 // Actions
 
@@ -54,6 +57,7 @@ function send_message(req, res, parsed_req) {
 		name = parsed_req.query.name || "Nerd";
 		
 		// Sanitize Text
+		text_msg += "";
 		text_msg = text_msg.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 		
 		messages.push({
@@ -81,12 +85,14 @@ function send_message(req, res, parsed_req) {
 function get_messages(req, res, parsed_req) {
 	value = [];
 	
+	locked = true;
 	if (parsed_req.query.ts == 0) value = messages;
 	else {
 		for (i in messages) {
 			if (parsed_req.query.ts < messages[i].ts) value.push(messages[i]);
 		}
 	}
+	locked = false;
 	
 	if (value.length == 0) callbacks.push({
 		ts: Math.round(new Date().getTime() / 1000),
