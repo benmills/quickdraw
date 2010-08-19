@@ -27,6 +27,7 @@ strong {
 }
 .r {-moz-border-radius:1px;-webkit-border-radius:1px;border-radius:1px;}
 .s {-moz-box-shadow:0 1px 3px #222;-webkit-box-shadow:0 1px 3px #222;box-shadow:0 1px 3px #222;}
+.hide {display:none;}
 
 /*----------------------------------
 	s t r u c t u r e             */

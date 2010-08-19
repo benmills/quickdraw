@@ -1,8 +1,17 @@
+/**
+ * Draw.js
+ * 
+ * The purpose of this file is to hold all the logic so that 
+ * users can draw by clicking and holding down in a canvas element
+*/
+
 var canvas, 
 		context, 
-		has_data = false, 
-		color = "#222222", 
-		started=false,
+		has_data = false, // Flag that changes to true when the user used the pen
+		color = "#222222", // The default pen color
+		started = false, // Flag that is used for the mouseout and mouseup events
+		
+		// Draw is what actually creates the drawing
 		draw=function (e) {
   		if (started) {
 				e = calc(e);
@@ -11,6 +20,8 @@ var canvas,
 				has_data = true;
   		}
 		}, 
+		
+		// Calc finds the relative cords inside the canvas
 		calc=function(e) {
 			if (e.layerX || e.layerX == 0) { // Firefox
     		e._x = e.layerX;
@@ -26,10 +37,11 @@ $(function() {
   canvas = document.getElementById('draw');
   context = canvas.getContext('2d');
 	
+	// Bind the canvas element to the mouse events
 	$('#draw')
 	.mousedown(function(ev) {
 		context.beginPath();
-		ev = calc(ev);
+		ev = calc(ev); 
     context.moveTo(ev._x, ev._y);
 		context.lineWidth   = 2;
 		context.strokeStyle = color;

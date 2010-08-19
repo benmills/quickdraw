@@ -7,6 +7,13 @@ var sys = require('sys'),
 		messages = [];
 		callbacks = [];
 
+// Array Remove - By John Resig (MIT Licensed)
+Array.prototype.remove = function(from, to) {
+	var rest = this.slice((to || from) + 1 || this.length);
+	this.length = from < 0 ? this.length + from : from;
+	return this.push.apply(this, rest);
+};
+
 // Server
 http.createServer(function (req, res) {
 	var parsed_req = url.parse(req.url, true);
@@ -18,7 +25,21 @@ http.createServer(function (req, res) {
 	//sys.puts(sys.inspect(parsed_req));
 	callback(req, res, parsed_req);
 
-}).listen(1111);
+}).listen(1112);
+
+// Clean up hanging requests
+setInterval(function() {
+	sys.puts('clean up!', callbacks.length);
+	var ts = Math.round(new Date().getTime() / 1000);
+	for (i in callbacks) {
+		if (callbacks[i]) {
+			if ((callbacks[i].ts + 40) < ts) {
+				return_blank(callbacks[i]);
+				callbacks.remove(i);
+			}
+		}
+	}
+}, 2000);
 
 // Actions
 
@@ -32,12 +53,16 @@ function send_message(req, res, parsed_req) {
 		text_msg = parsed_req.query.text_message || "";
 		name = parsed_req.query.name || "Nerd";
 		
+		// Sanitize Text
+		text_msg = text_msg.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+		
 		messages.push({
 			ts: Math.round(new Date().getTime() / 1000),
 			message: img_msg,
 			text_message: text_msg,
 			name: name
 		});
+		
 		sys.puts('text: '+text_msg);
 		sys.puts('name: '+name);
 		if (messages.length > 10) messages.shift();
@@ -45,7 +70,7 @@ function send_message(req, res, parsed_req) {
 	
 	if (callbacks.length > 0) {
 		for (i in callbacks) {
-			callbacks[i].callback(callbacks[i].req, callbacks[i].res, callbacks[i].parsed_req);
+			if(callbacks[i].callback) callbacks[i].callback(callbacks[i].req, callbacks[i].res, callbacks[i].parsed_req);
 		}
 		callbacks = [];
 	}
@@ -64,6 +89,7 @@ function get_messages(req, res, parsed_req) {
 	}
 	
 	if (value.length == 0) callbacks.push({
+		ts: Math.round(new Date().getTime() / 1000),
 		callback: get_messages,
 		req: req,
 		res: res,
@@ -74,4 +100,11 @@ function get_messages(req, res, parsed_req) {
 		res.write(parsed_req.query.callback+'('+sys.inspect(value).split('\n').join('')+');');
 		res.end();
 	}
+}
+
+function return_blank(callback) {
+	sys.puts('clearing an old callback...');
+	callback.res.writeHead(200, {'Content-Type': 'text/html'});
+	callback.res.write(callback.parsed_req.query.callback+'([]);');
+	callback.res.end();
 }
