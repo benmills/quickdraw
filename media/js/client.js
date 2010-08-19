@@ -11,9 +11,11 @@
 */
 
 var last_update = 0, 
-		name=prompt("Please enter your name","Nerd"), 
-		placeholder_text = 'Type a message here',
-		port = '1112';
+		name,
+		placeholder_text = 'Type a message',
+		port = '1112',
+		colorBtns = '#post ul li a',
+		cssActive = 'active';
 
 function poll() {
 	$.ajax({
@@ -50,7 +52,7 @@ $(function() {
 	
 	var sub = function(e) {
 		e.preventDefault();
-		text_message = $('#msg').val();
+		text_message = $('#msg').html();
 		if (text_message == placeholder_text) text_message = '';
 		
 		if (has_data || text_message.length > 0)  {
@@ -58,31 +60,40 @@ $(function() {
 			img = has_data? canvas.toDataURL():"";
 			has_data = false;
 			
-			context.clearRect(0, 0, 735, 198);
-			$('#msg').val(placeholder_text);
+			context.clearRect(0, 0, 380, 308);
+			$('#msg').html(placeholder_text);
 			
 			$.get('http://bmdev.org:'+port+'/?message='+img+"&text_message="+text_message+"&name="+name);
 		}
 	}
 	
-	$("#say").click(sub);
-	
-	$('form').submit(sub)
+	$("#send").click(sub);
+	$('#send_form').submit(sub);
 	
 	$('#clr').click(function(e) {
 		e.preventDefault();
-		context.clearRect(0, 0, 735, 198);
+		context.clearRect(0, 0, 380, 308);
 		has_data = false;
 	});
 	
 	$("#dk").click(function(e) {
 		e.preventDefault();
 		color = "#222222";
+		$(colorBtns).removeClass(cssActive);
+		$(this).addClass(cssActive);
 	});
 	
 	$("#lt").click(function(e) {
 		e.preventDefault();
 		color = "#c10e0e";
+		$(colorBtns).removeClass(cssActive);
+		$(this).addClass(cssActive);
+	});
+	
+	$('#chat').click(function(e) {
+		e.preventDefault();
+		name = $('#name').val();
+		$('#modal').fadeOut('fast');
 	});
 	
 	// canvas cursor fix
@@ -91,6 +102,6 @@ $(function() {
 	cvs.onmousedown = function () { return false; }; // moz
 
 	// auto select text on focus of input
-	$('#msg').focus(function(){this.select();});
+	$('#msg,#name').focus(function(){this.select();});
 	
 });

@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="media/css/app.css">
 	<script src="http://www.google.com/jsapi"></script>
-	<script> google.load("jquery", "1.4"); </script>
+	<script>google.load("jquery", "1.4");</script>
 	<script src="media/js/draw.js" type="text/javascript" charset="utf-8"></script>
 	<script src="media/js/client.js" type="text/javascript" charset="utf-8"></script>
 </head>
@@ -19,13 +19,6 @@
 		<div class="content s">
 			
 			<ul class="log">
-				<li class="system">
-					<span>QuickDraw</span>
-					<p>
-						Hello! QuickDraw is slick way to collaborate by sharing messages and drawings.<br>
-						Please <strong>provide a name below</strong>, and your all set to chat!
-					</p>
-				</li>
 				<li>
 					<span>Name</span>
 					<p>message</p>
@@ -33,20 +26,43 @@
 			</ul>
 			
 			<div id="post">
-				<canvas id="draw" width="735" height="198"></canvas>
+				
 				<ul>
+					<li><a id="dk" class="btn r s active" href="#">black</a></li>
+					<li><a id="lt" class="btn r s" href="#">red</a></li>
 					<li><a id="clr" class="" href="#">clear drawing x</a></li>
-					<li><a id="dk" class="btn r s" href="#">dark</a></li>
-					<li><a id="lt" class="btn r s" href="#">light</a></li>
 				</ul>
-				<form>
-					<input autocomplete="off" id="msg" class="r s" type="text" size="100" value="Type a message here">
-					<a id="say" class="btn r s" href="#">say</a>
-					<input type="submit" value='Send' class='hide'>
+				
+				<canvas id="draw" width="380" height="308"></canvas>
+				
+				<form id='send_form'>
+					<textarea id="msg" class="r s" rows="3" cols="30">Type a message</textarea>
+					<a id="send" class="btn r s" href="#">send</a>
 				</form>
+				
+				<div id="modal">
+					<p>
+						Welcome! QuickDraw is slick way to collaborate by sharing messages and drawings. Please provide a name, and you&rsquo;re all set to chat!
+					</p>
+					<form action="#">
+						<input id="name" type="text" maxlength="20" autocomplete="no" size="25" value="Your name">
+						<a id="chat" class="btn r s" href="#">chat</a>
+					</form>
+				</div>
+			
 			</div>
 			
 		</div>
 	</div>
+	
+	<footer>
+		<p class="props">
+			By <a href="http://www.benmillsdesigns.com" title="Developer">Ben</a> and <a href="http://www.shauncrittenden.com" title="Designer, UI">Shaun</a>
+		</p>
+		<p>
+			Built exclusively for <a href="http://10k.aneventapart.com/">10K Apart</a>, source on <a href="http://github.com/Benmills/quickdraw">Github</a>.
+		</p>
+	</footer>
+	
 </body>
 </html>

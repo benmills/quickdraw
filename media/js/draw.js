@@ -15,7 +15,7 @@ var canvas,
 		draw=function (e) {
   		if (started) {
 				e = calc(e);
-				context.lineTo(e._x, e._y);
+				context.lineTo(e._x, (e._y-50));
 				context.stroke();
 				has_data = true;
   		}
