@@ -11,7 +11,6 @@
 */
 
 var last_update = 0, 
-		name,
 		placeholder_text = 'Type a message',
 		port = '1112',
 		colorBtns = '#post ul li a',
@@ -25,19 +24,15 @@ function poll() {
 		timeout: 50000,
 		
 		success: function(data) {
-			var oHeight = $(".log").attr("scrollHeight");
 			for (i in data) {
 				c = '<li><span>'+data[i].name+'</span><p>';
-				if (data[i].message.length > 0) c += '<img src="'+data[i].message.split(' ').join('+')+'"><br>';
+				if (data[i].message.length > 0) c += '<img height="200px" src="'+data[i].message.split(' ').join('+')+'"><br>';
 				c += data[i].text_message+'</p></li>'
 				$(".log").append(c);
 			}
 			
 			if (data[0]) last_update = data[data.length-1].ts;
-			var nHeight = $(".log").attr("scrollHeight");
-			if( nHeight > oHeight ) {
-				$(".log").stop(true).animate({scrollTop : nHeight},200);
-			}
+			$('.log').stop(true).animate({scrollTop: $(".log").attr("scrollHeight")},360);
 			poll();
 		},
 		
@@ -56,7 +51,7 @@ $(function() {
 	var sub = function(e) {
 		e.preventDefault();
 		text_message = $('#msg').val();
-		if (text_message == placeholder_text) text_message = '';
+		if (text_message.replace(/^\s*|\s*$/g,'') == placeholder_text.replace(/^\s*|\s*$/g,'')) text_message = '';
 		
 		if (has_data || text_message.length > 0)  {
 			
@@ -71,6 +66,21 @@ $(function() {
 	
 	$("#send").click(sub);
 	$('#send_form').submit(sub);
+	$('#msg').keyup(function(e) {
+		e.preventDefault();
+		if (e.keyCode === 13) {
+			sub(e);
+		 }
+	});
+	
+	var handle_name = function(e) {
+		e.preventDefault();
+		n = $('#name').val();
+		$('#modal').fadeOut('fast');
+	};
+	
+	$('#name_form').submit(handle_name);
+	$('#chat').click(handle_name);
 	
 	$('#clr').click(function(e) {
 		e.preventDefault();
@@ -90,14 +100,6 @@ $(function() {
 		color = "#c10e0e";
 		$(colorBtns).removeClass(cssActive);
 		$(this).addClass(cssActive);
-	});
-	
-	$('#chat').click(function(e) {
-		e.preventDefault();
-		console.log($("#name").val());
-		n = $('#name').val();
-		console.log(n);
-		$('#modal').fadeOut('fast');
 	});
 	
 	// canvas cursor fix

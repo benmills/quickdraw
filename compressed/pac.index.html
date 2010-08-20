@@ -3,39 +3,68 @@
 <head>
 <title>Quickdraw</title>
 <meta charset="utf-8">
-<style>*{margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;}:focus{outline:none;}body{line-height:1;}ol,ul{list-style:none;}header,footer{display:block;}body,form input,p,li{color:#655f5d;font-family:"Trebuchet MS",Helvetica,Arial,Sans-serif;font-size:13px;}a,a:link{color:#b24e2f;}a:hover,#lt:hover{color:#d55e3a;}strong{color:#333;font-weight:bold;}.r{-moz-border-radius:1px;-webkit-border-radius:1px;border-radius:1px;}.s{-moz-box-shadow:0 1px 3px #222;-webkit-box-shadow:0 1px 3px #222;box-shadow:0 1px 3px #222;}html,body{background-color:#b24e2f;text-align:center;}body{padding-bottom:20px;}header,#shell{margin:0 auto;text-align:left;width:980px;}#shell{background-color:#93432b;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;padding:10px;position:relative;}.content{background:url(i/bg.gif) left top repeat-y #FFF;height:650px;border-left:solid 10px #425875;}header h1{background:url(i/quickdraw.gif) 15px top no-repeat transparent;display:block;height:42px;text-indent:-99em;margin:20px 0;}.log{display:block;height:400px;overflow:auto;}.log li{position:relative;}.log li span{color:#333;display:block;padding:5px 0;position:absolute;line-height:16px;left:0;width:100px;text-align:right;}.log li p{line-height:16px;margin-left:110px;padding:5px 350px 5px 10px;}.log .system span{color:#b24e2f;padding:11px 0;}.log .system p{background-color:#f8fada;border-bottom:solid 1px #d0d3aa;padding:10px 350px 9px 10px;}#post{background:url(i/grid.gif) left top repeat transparent;border-top:solid 1px #cdd5e1;height:249px;margin-left:110px;position:relative;}#post ul{float:right;margin:5px 10px 0 0;}#post ul li{padding:0 0 10px;float:left;clear:left;}a#clr{color:#333;text-decoration:none;float:right;font-size:11px;text-align:right;width:110px;margin:7px 0;}a#show{margin-top:40px;}#draw,#draw:hover,#draw:focus,#draw:active{cursor:crosshair;}form{background-color:#425875;position:absolute;bottom:0;left:0;padding:10px;width:840px;}form input{font-size:13px;color:#b3b3b3;border:none;outline:none;padding:0 10px 0;height:30px;width:700px;float:left;}form input:focus{color:#333;}a.btn{color:#333;display:block;background-color:#f4f3f2;float:right;width:110px;height:30px;line-height:30px;text-align:center;text-decoration:none;text-shadow:0 1px 1px #333;letter-spacing:.04em;}a.btn:hover{background-color:#e8e8e7;color:#000;}#lt{color:#b24e2f;}#show,#say{background-color:#394c65;color:#F4F4F4;}#show:hover,#say:hover{background-color:#2e445b;color:#FFF;}</style>
+<style type="text/css" media="screen">*{margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline}:focus{outline:none}body{line-height:1}ol,ul{list-style:none}header,footer{display:block}body,form input,p,li{color:#655f5d;font-family:"Trebuchet MS",Helvetica,Arial,Sans-serif;font-size:13px}a,a:link{color:#b24e2f}a:hover,#lt:hover{color:#d55e3a}strong{color:#333;font-weight:bold}.r{-moz-border-radius:1px;-webkit-border-radius:1px;border-radius:1px}.s{-moz-box-shadow:0 1px 2px #222;-webkit-box-shadow:0 1px 2px #222;box-shadow:0 1px 2px #222}.hide{display:none}html,body{background-color:#b24e2f;text-align:center}body{padding-bottom:20px}header,#shell{margin:0 auto;text-align:left;width:980px}#shell{background-color:#93432b;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;padding:10px;position:relative}.content{background:url(bg.gif) left top repeat-y #FFF;height:500px;border-left:solid 10px #425875}header h1{background:url(quickdraw.gif) 15px top no-repeat transparent;display:block;height:60px;text-indent:-99em;margin:20px 0}.log{display:block;height:100%;overflow:auto;width:589px;float:left}.log li{border-top:1px solid #DAE2EC;position:relative}.log li img{max-width:400px}.log li span{color:#333;display:block;padding:5px 0;position:absolute;line-height:16px;left:0;width:100px;text-align:right}.log li p{line-height:16px;margin-left:110px;padding:5px 30px 5px 10px}.log .system span{color:#b24e2f;padding:11px 0}.log .system p{background-color:#f8fada;border-bottom:solid 1px #d0d3aa;padding:10px 30px 9px 10px}#post{background:url(grid.gif) left top repeat transparent;border-left:solid 1px #cdd5e1;height:100%;position:relative;float:right;width:380px}#post ul{float:left;margin:10px;width:360px}#post ul li{float:left;width:90px;margin-right:10px}#post ul li:last-child{float:right;margin:0}#draw,#draw:hover,#draw:focus,#draw:active{cursor:crosshair}a.btn{color:#333;display:block;background-color:#f4f3f2;background-color:#F6F7F7;float:right;width:100%;height:30px;line-height:30px;text-align:center;text-decoration:none;letter-spacing:.04em}a.btn:hover{background-color:#e8e8e7;background-color:#FFF;color:#000}a#clr{color:#333;text-decoration:none;float:right;font-size:13px;height:30px;line-height:30px;text-align:right;width:110px}a#clr:hover{color:#b24e2f}#lt{color:#b24e2f}#send,#modal form a{background-color:#394c65;color:#F4F4F4;text-shadow:0 1px 1px #000}#send:hover,#modal form a:hover{background-color:#2e445b;color:#FFF}a.active{text-decoration:underline}form{background-color:#425875;position:absolute;bottom:0;left:0;padding:10px;width:360px}form textarea{display:block;font-size:13px;color:#b3b3b3;border:none;outline:none;padding:10px;width:340px;height:60px;margin-bottom:10px}form textarea:focus{color:#333}#modal{position:absolute;top:0;left:0;width:100%;height:100%;background-color:rgba(66,88,117,.92)}#modal p{color:#FFF;margin:160px 40px 7px;font-size:13px;line-height:17px;text-shadow:0 1px 1px #000}#modal form{position:relative;margin:0 30px 10px;width:auto}#modal form a{float:right;width:90px}#modal form input{padding:7px 10px;height:auto;width:180px}footer{text-align:left;width:980px;margin:0 auto}footer p{color:#7d3925;float:left;font-size:11px;padding:10px}footer p.props{background-color:#93432b;color:#c15433;width:100px;text-align:right}footer a,footer a:link,footer a:visited{color:#7d3925}footer a:hover{color:#68301f}footer p.props a{color:#c15433}footer p.props a:hover{color:#d4603c}</style>
 <script src="http://www.google.com/jsapi"></script>
 <script>google.load("jquery", "1.4");</script>
-<script type="text/javascript">var last_update=0,name=prompt("Please enter your name","Nerd"),placeholder_text='Type a message here',canvas,context,has_data=false,color="#222222",started=false,draw=function(ev){if(started){ev=calc(ev);context.lineTo(ev._x,ev._y);context.stroke();has_data=true}},calc=function(ev){if(ev.layerX||ev.layerX==0){ev._x=ev.layerX;ev._y=ev.layerY}else if(ev.offsetX||ev.offsetX==0){ev._x=ev.offsetX;ev._y=ev.offsetY}return ev};function poll(){$.ajax({url:'http://bmdev.org:1111/get/?ts='+last_update+'&callback=?',dataType:'json',success:function(data){last_update=Math.round(new Date().getTime()/1000);var oHeight=$(".log").attr("scrollHeight");for(i in data){c='<li><span>'+data[i].name+'</span><p>';if(data[i].message.length>0)c+='<img src="'+data[i].message.split(' ').join('+')+'"><br>';c+=data[i].text_message+'</p></li>';$(".log").append(c)}var nHeight=$(".log").attr("scrollHeight");if(nHeight>oHeight)$(".log").stop(true).animate({scrollTop:nHeight},200)},complete:poll})}$(function(){canvas=document.getElementById('draw');context=canvas.getContext('2d');$('#draw').mousedown(function(ev){context.beginPath();ev=calc(ev);context.moveTo(ev._x,ev._y);context.lineWidth=2;context.strokeStyle=color;started=true}).mousemove(draw).mouseup(function(ev){if(started){started=false;draw(ev)}}).mouseout(function(ev){if(started){started=false;draw(ev)}});poll();$("#say").click(function(e){e.preventDefault();text_message=$('#msg').val();if(text_message==placeholder_text)text_message='';if(has_data||text_message.length>0){img=has_data?canvas.toDataURL():"";has_data=false;canvas.width=canvas.width;$('#msg').val(placeholder_text);$.get('http://bmdev.org:1111/?message='+img+"&text_message="+text_message+"&name="+name)}});$('#clr').click(function(e){e.preventDefault();canvas.width=canvas.width;has_data=false});$("#dk").click(function(e){e.preventDefault();color="#222222"});$("#lt").click(function(e){e.preventDefault();color="#c10e0e"});var cvs=document.getElementById('draw');cvs.onselectstart=function(){return false};cvs.onmousedown=function(){return false};$('#msg').focus(function(){this.select()})});</script>
+<script type="text/javascript" charset="utf-8">
+var canvas,context,has_data=false,color="#222222",started=false,draw=function(e){if(started){e=calc(e);context.lineTo(e._x,e._y-50);context.stroke();has_data=true;}},calc=function(e){if(e.layerX||e.layerX==0){e._x=e.layerX;e._y=e.layerY;}else if(e.offsetX||e.offsetX==0){e._x=e.offsetX;e._y=e.offsetY;}
+return e;};var last_update=0,placeholder_text='Type a message',port='1112',colorBtns='#post ul li a',cssActive='active';function poll(){$.ajax({url:'http://bmdev.org:'+port+'/get/?ts='+last_update+'&callback=?',dataType:'json',async:true,timeout:50000,success:function(data){for(i in data){c='<li><span>'+data[i].name+'</span><p>';if(data[i].message.length>0)c+='<img height="200px" src="'+data[i].message.split(' ').join('+')+'"><br>';c+=data[i].text_message+'</p></li>'
+$(".log").append(c);}
+if(data[0])last_update=data[data.length-1].ts;$('.log').stop(true).animate({scrollTop:$(".log").attr("scrollHeight")},360);poll();},error:function(err){poll();}});}
+$(function(){canvas=document.getElementById('draw');context=canvas.getContext('2d');$('#draw').mousedown(function(ev){context.beginPath();ev=calc(ev);context.moveTo(ev._x,ev._y-50);context.lineWidth=2;context.strokeStyle=color;started=true;}).mousemove(draw).mouseup(function(ev){if(started){started=false;draw(ev);}}).mouseout(function(ev){if(started){started=false;draw(ev);}});var n;poll();$('#msg').val(placeholder_text);var sub=function(e){e.preventDefault();text_message=$('#msg').val();if(text_message.replace(/^\s*|\s*$/g,'')==placeholder_text.replace(/^\s*|\s*$/g,''))text_message='';if(has_data||text_message.length>0){img=has_data?canvas.toDataURL():"";has_data=false;context.clearRect(0,0,380,308);$('#msg').val(placeholder_text);$.getJSON('http://bmdev.org:'+port+'/?message='+img+"&text_message="+text_message+"&name="+n+"&jsoncallback=?");}}
+$("#send").click(sub);$('#send_form').submit(sub);$('#msg').keyup(function(e){e.preventDefault();if(e.keyCode===13){sub(e);}});var handle_name=function(e){e.preventDefault();n=$('#name').val();$('#modal').fadeOut('fast');};$('#name_form').submit(handle_name);$('#chat').click(handle_name);$('#clr').click(function(e){e.preventDefault();context.clearRect(0,0,380,308);has_data=false;});$("#dk").click(function(e){e.preventDefault();color="#222222";$(colorBtns).removeClass(cssActive);$(this).addClass(cssActive);});$("#lt").click(function(e){e.preventDefault();color="#c10e0e";$(colorBtns).removeClass(cssActive);$(this).addClass(cssActive);});var cvs=document.getElementById('draw');cvs.onselectstart=function(){return false;};cvs.onmousedown=function(){return false;};$('#msg,#name').focus(function(){this.select();});});
+</script>
 </head>
 <body>
+
 <header>
 <h1>QuickDraw</h1>
 </header>
+
 <div id="shell">
 <div class="content s">
+
 <ul class="log">
-<li class="system">
-<span>QuickDraw</span>
-<p>
-Hello! QuickDraw is slick way to collaborate by sharing messages and drawings.<br>
-Please <strong>provide a name below</strong>, and your all set to chat!
-</p>
-</li>
 </ul>
+
 <div id="post">
-<canvas id="draw" width="735" height="198"></canvas>
+
 <ul>
+<li><a id="dk" class="btn r s active" href="#">black</a></li>
+<li><a id="lt" class="btn r s" href="#">red</a></li>
 <li><a id="clr" class="" href="#">clear drawing x</a></li>
-<li><a id="dk" class="btn r s" href="#">dark</a></li>
-<li><a id="lt" class="btn r s" href="#">light</a></li>
 </ul>
-<form>
-<input autocomplete="off" id="msg" class="r s" type="text" size="100" value="Type a message here">
-<a id="say" class="btn r s" href="#">say</a>
+
+<canvas id="draw" width="380" height="308"></canvas>
+
+<form id='send_form'>
+<textarea id="msg" class="r s" rows="3" cols="30">Type a message</textarea>
+<a id="send" class="btn r s" href="#">send</a>
+</form>
+
+<div id="modal">
+<p>
+Welcome! QuickDraw is slick way to collaborate by sharing messages and drawings. Please provide a name, and you&rsquo;re all set to chat!
+</p>
+<form id='name_form' action="#">
+<input id="name" type="text" maxlength="20" autocomplete="no" size="25" value="Your name">
+<a id="chat" class="btn r s" href="#">chat</a>
 </form>
 </div>
+
+</div>
+
 </div>
 </div>
+
+<footer>
+<p class="props">
+By <a href="http://www.benmillsdesigns.com" title="Developer">Ben</a> and <a href="http://www.shauncrittenden.com" title="Designer, UI">Shaun</a>
+</p>
+<p>
+Built exclusively for <a href="http://10k.aneventapart.com/">10K Apart</a>, source on <a href="http://github.com/Benmills/quickdraw">Github</a>. Total size: 9.4 kilobytes.
+</p>
+</footer>
+
 </body>
 </html>

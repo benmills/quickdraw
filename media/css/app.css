@@ -80,6 +80,7 @@ header h1 {
 	float: left;
 }
 .log li {
+	border-top:1px solid #DAE2EC;
 	position: relative;
 }
 .log li img { max-width: 400px;} 
