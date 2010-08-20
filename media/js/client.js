@@ -27,7 +27,7 @@ function poll() {
 			for (i in data) {
 				c = '<li><span>'+data[i].name+'</span><p>';
 				if (data[i].message.length > 0) c += '<img height="200px" src="'+data[i].message.split(' ').join('+')+'"><br>';
-				c += data[i].text_message+'</p></li>'
+				c += data[i].text_message+'</p></li>';
 				$(".log").append(c);
 			}
 			
@@ -59,18 +59,23 @@ $(function() {
 			has_data = false;
 	
 			context.clearRect(0, 0, 380, 308);
-			$('#msg').val(placeholder_text);
+			$('#msg').val('');
 			$.getJSON('http://bmdev.org:'+port+'/?message='+img+"&text_message="+text_message+"&name="+n+"&jsoncallback=?");
 		}
-	}
+	};
 	
 	$("#send").click(sub);
 	$('#send_form').submit(sub);
+	
 	$('#msg').keyup(function(e) {
 		e.preventDefault();
 		if (e.keyCode === 13) {
 			sub(e);
 		 }
+	});
+	
+	$('#msg').focus(function() {
+		this.select();
 	});
 	
 	var handle_name = function(e) {
@@ -108,6 +113,7 @@ $(function() {
 	cvs.onmousedown = function () { return false; }; // moz
 
 	// auto select text on focus of input
-	$('#msg,#name').focus(function(){this.select();});
+	$('#name').focus();
+	$('#name').select();
 	
 });
