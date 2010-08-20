@@ -25,7 +25,6 @@ function poll() {
 		timeout: 50000,
 		
 		success: function(data) {
-			last_update = Math.round(new Date().getTime() / 1000);
 			var oHeight = $(".log").attr("scrollHeight");
 			for (i in data) {
 				c = '<li><span>'+data[i].name+'</span><p>';
@@ -33,6 +32,8 @@ function poll() {
 				c += data[i].text_message+'</p></li>'
 				$(".log").append(c);
 			}
+			
+			if (data[0]) last_update = data[data.length-1].ts;
 			var nHeight = $(".log").attr("scrollHeight");
 			if( nHeight > oHeight ) {
 				$(".log").stop(true).animate({scrollTop : nHeight},200);
@@ -41,29 +42,30 @@ function poll() {
 		},
 		
 		error: function(err) {
-			console.log('error!');
 			poll();
 		}
 	});
 }
 
 $(function() {
+	var n;
+
 	poll();
+	$('#msg').val(placeholder_text);
 	
 	var sub = function(e) {
 		e.preventDefault();
-		text_message = $('#msg').html();
+		text_message = $('#msg').val();
 		if (text_message == placeholder_text) text_message = '';
 		
 		if (has_data || text_message.length > 0)  {
 			
 			img = has_data? canvas.toDataURL():"";
 			has_data = false;
-			
+	
 			context.clearRect(0, 0, 380, 308);
-			$('#msg').html(placeholder_text);
-			
-			$.get('http://bmdev.org:'+port+'/?message='+img+"&text_message="+text_message+"&name="+name);
+			$('#msg').val(placeholder_text);
+			$.getJSON('http://bmdev.org:'+port+'/?message='+img+"&text_message="+text_message+"&name="+n+"&jsoncallback=?");
 		}
 	}
 	
@@ -92,7 +94,9 @@ $(function() {
 	
 	$('#chat').click(function(e) {
 		e.preventDefault();
-		name = $('#name').val();
+		console.log($("#name").val());
+		n = $('#name').val();
+		console.log(n);
 		$('#modal').fadeOut('fast');
 	});
 	

@@ -31,11 +31,10 @@ http.createServer(function (req, res) {
 // Clean up hanging requests
 setInterval(function() {
 	if (locked == false) {
-		sys.puts('clean up!', callbacks.length);
-		var ts = Math.round(new Date().getTime() / 1000);
+		var ts = Math.round(new Date().getTime());
 		for (i in callbacks) {
 			if (callbacks[i]) {
-				if ((callbacks[i].ts + 20) < ts) {
+				if ((callbacks[i].ts + (20 * 1000)) < ts) {
 					return_blank(callbacks[i]);
 					callbacks.remove(i);
 				}
@@ -47,6 +46,7 @@ setInterval(function() {
 // Actions
 
 function send_message(req, res, parsed_req) {
+	sys.puts('saving message');
 	res.writeHead(200, {'Content-Type': 'text/html'});
 	res.write('1');
 	res.end();
@@ -61,7 +61,7 @@ function send_message(req, res, parsed_req) {
 		text_msg = text_msg.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 		
 		messages.push({
-			ts: Math.round(new Date().getTime() / 1000),
+			ts: Math.round(new Date().getTime()),
 			message: img_msg,
 			text_message: text_msg,
 			name: name
@@ -89,28 +89,37 @@ function get_messages(req, res, parsed_req) {
 	if (parsed_req.query.ts == 0) value = messages;
 	else {
 		for (i in messages) {
-			if (parsed_req.query.ts < messages[i].ts) value.push(messages[i]);
+			if (messages[i] && parseInt(parsed_req.query.ts) < parseInt(messages[i].ts)) {
+				sys.puts(parsed_req.query.ts+" "+messages[i].ts);
+				value.push(messages[i]);
+			}
 		}
 	}
 	locked = false;
 	
 	if (value.length == 0) callbacks.push({
-		ts: Math.round(new Date().getTime() / 1000),
+		ts: Math.round(new Date().getTime()),
 		callback: get_messages,
 		req: req,
 		res: res,
 		parsed_req: parsed_req
 	});
 	else {
-		res.writeHead(200, {'Content-Type': 'text/html'});
-		res.write(parsed_req.query.callback+'('+sys.inspect(value).split('\n').join('')+');');
-		res.end();
+		return_messages(req, res, parsed_req, value);
 	}
+	
+	sys.puts(callbacks.length);
 }
 
 function return_blank(callback) {
-	sys.puts('clearing an old callback...');
+	//sys.puts('clearing an old callback...');
 	callback.res.writeHead(200, {'Content-Type': 'text/html'});
 	callback.res.write(callback.parsed_req.query.callback+'([]);');
 	callback.res.end();
+}
+
+function return_messages(req, res, parsed_req, value) {
+	res.writeHead(200, {'Content-Type': 'text/html'});
+	res.write(parsed_req.query.callback+'('+sys.inspect(value).split('\n').join('')+');');
+	res.end();
 }

@@ -15,7 +15,7 @@ var canvas,
 		draw=function (e) {
   		if (started) {
 				e = calc(e);
-				context.lineTo(e._x, (e._y-50));
+				context.lineTo(e._x, e._y-50);
 				context.stroke();
 				has_data = true;
   		}
@@ -42,7 +42,7 @@ $(function() {
 	.mousedown(function(ev) {
 		context.beginPath();
 		ev = calc(ev); 
-    context.moveTo(ev._x, ev._y);
+    context.moveTo(ev._x, ev._y-50);
 		context.lineWidth   = 2;
 		context.strokeStyle = color;
     started = true;
