@@ -12,13 +12,13 @@
 
 var last_update = 0, 
 		placeholder_text = 'Type a message',
-		port = '1112',
+		port = '2222',
 		colorBtns = '#post ul li a',
 		cssActive = 'active';
 
 function poll() {
 	$.ajax({
-		url: 'http://bmdev.org:'+port+'/get/?ts='+last_update+'&callback=?',
+		url: 'http://127.0.0.1:'+port+'/get/?ts='+last_update+'&callback=?',
 		dataType: 'json',
 		async: true,
 		timeout: 50000,
@@ -60,7 +60,7 @@ $(function() {
 	
 			context.clearRect(0, 0, 380, 308);
 			$('#msg').val('');
-			$.getJSON('http://bmdev.org:'+port+'/?message='+img+"&text_message="+text_message+"&name="+n+"&jsoncallback=?");
+			$.getJSON('http://127.0.0.1:'+port+'/?message='+img+"&text_message="+text_message+"&name="+n+"&jsoncallback=?");
 		}
 	};
 	
