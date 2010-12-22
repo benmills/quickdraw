@@ -1,39 +1,23 @@
-//This is a server for the [Quickdraw](http://files.bmdev.org/quickdraw/) app written 
-//using node. The goal of this server is to accept messages that can contain
-//both text and image data and relay that out to each member of the chat room.
-
-//The breakdown is pretty simple. Server is just a light wrapper for a node
-//http.Server and App is a namespace for all the application logic. This was
-//a really lightweight app but I think the first thing I would change is move
-//Server and App apart and decopule App from the Server because right now the
-//App cares a little too much about things that it shouldn't. A especially
-//good example of this is how App has to know how to respond.
-
 // Load the modules required
 var sys = require('sys'),
     http = require('http'),
     url = require('url'),
     fs = require("fs"),
 
-//This code is from John Resig and it does its job but if I were to start over
-//I would keep this code inside App.remove_callback because that is the only
-//part in the code that I use Array.remove
+//This code is from John Resig and it works but I would like to move it
+//into App.remove_callback or into a util file because it is used once.
 Array.prototype.remove = function(from, to) {
   var rest = this.slice((to || from) + 1 || this.length);
   this.length = from < 0 ? this.length + from : from;
   return this.push.apply(this, rest);
 };
 
+
 //###Server
 
 var Server = function(port, routes) {
   // Make sure that `this` is accessible inside a Server object.
   var self = this;
-
-  //As I said above this does its job but needs to help abstract some of the
-  //other server functions away from App so that the App doesn't have to know
-  //about things like how to respond to requests, how to format JSON, and other
-  //things.
 
   this.init = function() {
     self.server = http.createServer(self.handle);
@@ -46,7 +30,7 @@ var Server = function(port, routes) {
     var parsed_req = url.parse(req.url, true);
 
     //The route system is very simple in this app. Each server gets passed in
-    //a dict that contain a reference to a fuction. If the action is empty
+    //a dictionary that contain a reference to a fuction. If the action is empty
     //meaning `http://127.0.0.1/` then we assume that this should be the root
     //action.
     var action = parsed_req.pathname.substr(1,parsed_req.pathname.length-2); 
@@ -61,13 +45,52 @@ var Server = function(port, routes) {
 
 //###App
 var App = {
+  // Messages hold the last 10 message objects
   messages: [],
+  // Callbacks hold requests that are waiting to be responded to
   callbacks: [],
 
   init: function() {
     setInterval(App.clean_up, 5000);
   },
 
+  // The basic idea here is if the request is the first request of a new user
+  // or if there are new messages from the time this request was made. If not,
+  // store this request as a callback that will be responded to when there is
+  // a new message.
+  get_messages: function(req, res, parsed_req) {
+    value = [];
+   
+    // Check to see if this is the inital page load, if it is return all
+    // messages.
+    if (parsed_req.query.ts === 0) value = App.messages;
+    else {
+      for (i in App.messages) {
+        if (App.messages[i] && 
+            parseInt(parsed_req.query.ts, 10) < parseInt(App.messages[i].ts, 10)) {
+          value.push(App.messages[i]);
+        }
+      }
+    }
+    
+    // Make sure that we have messages to return, if we don't store this
+    // request as a callback to be responded to when we have a new message for it.
+    if (value.length === 0) {
+      App.callbacks.push({
+        ts: App.get_ts(),
+        callback: App.get_messages,
+        req: req,
+        res: res,
+        parsed_req: parsed_req
+      });
+    } else {
+      // Return the new messages as JSON
+      App.respond(req, res, parsed_req, sys.inspect(value).split('\n').join(''));
+    }
+  },
+
+  // Get the message and make sure that each field is valid or replace it with
+  // a default value then add the message to the array
   send_message: function(req, res, parsed_req) {
     if (parsed_req.query.message || parsed_req.query.text_message) {
       var msg = {
@@ -85,44 +108,28 @@ var App = {
       
       App.messages.push(msg);
 
+      // If App is holding too many messages remove the oldest one
       if (App.messages.length > 10) App.messages.shift();
     }
     
+    // Now that a new message has been added we check to see if there are any
+    // callbacks that are hanging so we can push the new message to them
     if (App.callbacks.length > 0) {
       for (i in App.callbacks) {
-        if(App.callbacks[i].callback) App.callbacks[i].callback(App.callbacks[i].req, App.callbacks[i].res, App.callbacks[i].parsed_req);
+        var callback = App.callbacks[i];
+        // This code is hairy, I would like to store the callbacks in a better
+        // way to make this code more clear.
+        if(callback) callback.callback(callback.req, callback.res, callback.parsed_req);
       }
       App.callbacks = [];
     }
 
+    // Finish up the send_message request by responding back to the message
+    // sender
     App.respond(true);
   },
-
-  get_messages: function(req, res, parsed_req) {
-    value = [];
-    
-    if (parsed_req.query.ts === 0) value = App.messages;
-    else {
-      for (i in App.messages) {
-        if (App.messages[i] && parseInt(parsed_req.query.ts, 10) < parseInt(App.messages[i].ts, 10)) {
-          value.push(App.messages[i]);
-        }
-      }
-    }
-    
-    if (value.length === 0) {
-      App.callbacks.push({
-        ts: App.get_ts(),
-        callback: App.get_messages,
-        req: req,
-        res: res,
-        parsed_req: parsed_req
-      });
-    } else {
-      App.respond(req, res, parsed_req, sys.inspect(value).split('\n').join(''));
-    }
-  },
-
+  
+  // If a request is hanging for too long respond to it with nothing.
   clean_up: function() {
     var now = App.get_ts();
 
@@ -134,8 +141,14 @@ var App = {
     }
   },
 
+  // Escape HTML tags. This is far from a fool-proof system and needs to have
+  // a much more robust way of sanitizing the data.
   sanitize_text: function(text) {
-    return text.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;").replace(/\\/g, "&#92;"); 
+    return text.replace(/&/g, "&amp;")
+               .replace(/>/g, "&gt;")
+               .replace(/</g, "&lt;")
+               .replace(/"/g, "&quot;")
+               .replace(/\\/g, "&#92;"); 
   }
 
   return_blank: function(req, res, parsed_req) {
@@ -155,6 +168,7 @@ var App = {
   }
 };
 
+// Set up the app and server with the two routes for our application.
 App.init();
 var server = new Server(2222, {
   'get': App.get_messages,
