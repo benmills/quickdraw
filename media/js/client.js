@@ -29,6 +29,15 @@ function poll() {
 				if (data[i].message.length > 0) c += '<img height="200px" src="'+data[i].message.split(' ').join('+')+'"><br>';
 				c += data[i].text_message+'</p></li>';
 				$(".log").append(c);
+				
+				Twt.init(data[i].text_message, function(t){
+					
+					tweet = '<li><span>Twitter</span><p>';
+					tweet += '<p>'+t+'</p></li>';
+					
+					$(".log").append(tweet);
+				});
+				
 			}
 			
 			if (data[0]) last_update = data[data.length-1].ts;
