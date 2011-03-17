@@ -1,8 +1,8 @@
 // Load the modules required
-var sys = require('sys'),
+var sys = require('util'),
     http = require('http'),
     url = require('url'),
-    fs = require("fs"),
+    fs = require("fs")
 
 //This code is from John Resig and it works but I would like to move it
 //into App.remove_callback or into a util file because it is used once.
@@ -27,7 +27,9 @@ var Server = function(port, routes) {
   // Handle each new request that comes into our server
   this.handle = function(req, res) {
     //Whenever we handle a new request we parse it to make its attributes more accessible.
+    sys.debug(sys.inspect(req))
     var parsed_req = url.parse(req.url, true);
+    sys.debug(sys.inspect(parsed_req))
 
     //The route system is very simple in this app. Each server gets passed in
     //a dictionary that contain a reference to a fuction. If the action is empty
@@ -149,13 +151,14 @@ var App = {
                .replace(/</g, "&lt;")
                .replace(/"/g, "&quot;")
                .replace(/\\/g, "&#92;"); 
-  }
+  },
 
   return_blank: function(req, res, parsed_req) {
     App.respond(req, res, parsed_req, '[]');
   },
 
   respond: function(req, res, parsed_req, msg) {
+    sys.debug(sys.inspect(parsed_req))
     var output = parsed_req.query.callback+'('+msg+');';
 
     res.writeHead(200, {'Content-Type': 'text/html'});
